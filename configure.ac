@@ -1,14 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.69)
-AC_INIT(lparse, 0.1-0, code@eth.si)
+AC_INIT(linkgen, 0.1.0, code@eth.si)
 
 
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE()
 AM_PROG_CC_C_O
-
-
 
 AC_CONFIG_FILES(Makefile src/Makefile)
 
@@ -26,7 +24,9 @@ AC_CHECK_LIB([pthread], [pthread_create],,
 AC_CHECK_LIB([rt], [clock_gettime],,
 			AC_MSG_ERROR([rt library is missing!]))
 
-
+AC_CHECK_TYPES([__syscall_slong_t],,
+				AC_MSG_ERROR([type not defined!]))
+				
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdarg.h pthread.h unistd.h errno.h dirent.h time.h \
 				  	signal.h sys/syscall.h string.h regex.h  \
@@ -46,6 +46,7 @@ AC_TYPE_UINT64_T
 AC_TYPE_UNSIGNED_LONG_LONG_INT
 AC_TYPE_LONG_LONG_INT
 AC_TYPE_SIGNAL
+
 
 # Checks for library functions.
 AC_CHECK_FUNCS([pthread_create pthread_cancel pthread_join \
