@@ -39,7 +39,7 @@ void exit_program(int code);
 struct tm *get_time (void);
 
 time_t mclock_s (void);
-__syscall_slong_t mclock_n (void);
+time_t mclock_n (void);
 
 void catch_sig (int sig);
 
