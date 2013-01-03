@@ -108,7 +108,7 @@ int export_aslist
 {
 	int r = 0;
 	char b[32] = {0};
-	__syscall_slong_t cs,ce=0;
+	time_t cs,ce=0;
 
 	print_str(FLAG_OUTPUT_TIME,
 			"exporting: AS list to '%s'.. \n", export_aslist_path);
@@ -148,7 +148,7 @@ int export_links
 {
 	int r = 0;
 	char b[32] = {0};
-	__syscall_slong_t cs,ce=0;
+	time_t cs,ce=0;
 
 	print_str(FLAG_OUTPUT_TIME,
 			"exporting: AS links '%s'.. \n", export_links_path);
@@ -190,7 +190,7 @@ int export_json
 	char b[256] = {0};
 	uint i=0;
 	int64 r,s,d;
-	__syscall_slong_t cs,ce=0, at, lt;
+	time_t cs,ce=0, at, lt;
 
 	print_str(FLAG_OUTPUT_TIME,
 			"exporting: D3js .json format to '%s'.. \n"

@@ -23,9 +23,6 @@ AC_CHECK_LIB([pthread], [pthread_create],,
 # FIXME: Replace `main' with a function in `-lrt':
 AC_CHECK_LIB([rt], [clock_gettime],,
 			AC_MSG_ERROR([rt library is missing!]))
-
-AC_CHECK_TYPES([__syscall_slong_t],,
-				AC_MSG_ERROR([type not defined!]))
 				
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdarg.h pthread.h unistd.h errno.h dirent.h time.h \

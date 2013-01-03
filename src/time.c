@@ -20,7 +20,7 @@ time_t mclock_s
 	return 0;
 }
 
-__syscall_slong_t mclock_n
+time_t mclock_n
 (void)
 {
 	struct timespec ts = { 0 };
