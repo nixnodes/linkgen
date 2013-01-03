@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.69)
-AC_INIT(linkgen, 0.1.0, code@eth.si)
+AC_PREREQ(2.59)
+AC_INIT(linkgen, 0.1.2, code@eth.si)
 
 
 AC_CANONICAL_SYSTEM
@@ -26,9 +26,7 @@ AC_CHECK_LIB([rt], [clock_gettime],,
 				
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdarg.h pthread.h unistd.h errno.h dirent.h time.h \
-				  	signal.h sys/syscall.h string.h regex.h  \
-				  	],, 
-					AC_MSG_ERROR([header file not found!]))
+				  	signal.h sys/syscall.h string.h regex.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
