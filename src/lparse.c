@@ -98,7 +98,7 @@ int main(void) {
 	}
 
 	if ( rc )
-		exit_program(2345);
+		exit_program(1345);
 	else
 		exit_program(0);
 }

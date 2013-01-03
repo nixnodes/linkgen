@@ -26,6 +26,8 @@ void exit_program
 
 	mem_clean();
 
+	errno = code;
+
 	exit (code);
 }
 
