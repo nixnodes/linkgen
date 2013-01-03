@@ -157,6 +157,8 @@ int enum_dir
 	int f)
 {
 	int (*callback_f)(char *data, unsigned char type, void *arg) = NULL;
+	struct dirent *dirp;
+	int r = 0, ir;
 
 	callback_f = cb;
 
@@ -165,21 +167,18 @@ int enum_dir
 	}
 
 	DIR *dp = opendir (dir);
-	struct dirent *dirp;
-	int r = 0, ir;
 
 	if ( !dp ) {
 		return 1061;
 	}
 
-	while ( (dirp = readdir (dp)) )
+	while ( (dirp = readdir (dp)) ) {
 		if ( (ir = callback_f (dirp->d_name, dirp->d_type, arg)) ) {
 			if ( f == 1 )
 				return ir;
 			else
 				r++;
 		}
-
-
+	}
 	return r;
 }

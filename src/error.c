@@ -39,7 +39,7 @@ void *ec_ref[1024] = {
 		(void*) 1821, "error writing to json export file",
 		(void*) 1731, "error writing to links export file",
 		(void*) 2345, "\e[00;33m\x1b[1m\x1b[3mwarning: not all jobs suceeded\x1b[0m\e[00m",
-
+		(void*) 1061, "unable to open data directory for reading",
 		NULL, NULL
 };
 

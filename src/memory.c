@@ -24,7 +24,7 @@ void * alloc_mem
 
 	if ( (flags & FLAG_MALLOC_ONCE)
 			&& ptr ) {
-		errno = 1061;
+		errno = 1062;
 		return NULL;
 	}
 
