@@ -8,6 +8,16 @@
 #ifndef LPARSE_H_
 #define LPARSE_H_
 
+#define NODES_HEADER 	"{\"nodes\":["
+#define NODES_FOOTER 	"],\"links\":["
+#define LINKS_FOOTER	"]}"
+#define GROUP_TEMP1		"{\"group\":1,\"name\":\"%u\"},"
+#define GROUP_TEMP2		"{\"group\":1,\"name\":\"%u\"}"
+#define LINK_TEMP1		"{\"source\":%u,\"target\":%u,\"value\":1},"
+#define LINK_TEMP2		"{\"source\":%u,\"target\":%u,\"value\":1}"
+
+#define ERROR_STR_1 "\e[00;31m\x1b[1m\x1b[3merror: %s\x1b[0m\e[00m\n"
+
 int 	LINKDB_SIZE;
 int 	ASDB_SIZE;
 

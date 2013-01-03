@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.69)
-AC_INIT(lparse, 0.0.8, code@eth.si)
+AC_INIT(lparse, 0.1-0, code@eth.si)
 
 
 AC_CANONICAL_SYSTEM

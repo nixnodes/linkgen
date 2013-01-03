@@ -32,6 +32,13 @@ void *ec_ref[1024] = {
 		(void*) 1340, "unable to register new connection",
 		(void*) 1342, "connection accepted",
 		(void*) 1370, "connection shutting down gracefully",
+		(void*) 1876, "can't write to json export file",
+		(void*) 1736, "can't write to links export file",
+		(void*) 1726, "can't write to AS list export file",
+		(void*) 1721, "error writing to AS list export file",
+		(void*) 1821, "error writing to json export file",
+		(void*) 1731, "error writing to links export file",
+		(void*) 2345, "\e[00;33m\x1b[1m\x1b[3mwarning: not all jobs suceeded\x1b[0m\e[00m",
 
 		NULL, NULL
 };

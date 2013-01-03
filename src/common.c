@@ -16,7 +16,7 @@ void exit_program
 	print_str
 		(FLAG_OUTPUT_TIME|FLAG_OUTPUT_LOG,
 				"exiting program, code"
-				" %d: '%s'\n", code,
+				" %d: \x1b[1m\x1b[3m'%s'\x1b[0m\n", code,
 				strerror_int(code));
 
 	if ( fd_log ) {

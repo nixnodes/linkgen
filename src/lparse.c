@@ -33,8 +33,11 @@ int main(void) {
 	signal (SIGQUIT, catch_sig);
 
 	print_str (FLAG_OUTPUT_TIME,
-				"lparse ver. %d.%d.%d starting..\n",
+				"\e[00;32m\x1b[3m\x1b[1mlinkgen-%d.%d-%d  /nixnodes ~ 2013\x1b[0m\e[00m\n",
 				VER_MAJOR, VER_MINOR, VER_REVISION);
+
+	print_str(FLAG_OUTPUT_TIME,
+				"loading: initializing memory ..\n");
 
 	if ( (r = init_register(&linkdb,
 			LINKDB_SIZE,
@@ -49,9 +52,8 @@ int main(void) {
 	if ( (r = parse_options (CONFIG_FILE)) )
 		exit_program(r);
 
-
 	print_str(FLAG_OUTPUT_TIME,
-			"loading: link data.. \n");
+			"loading: working out as/link data.. \n");
 
 	cs = mclock_s();
 
@@ -66,33 +68,40 @@ int main(void) {
 	ce = mclock_s() - cs;
 
 	print_str(FLAG_OUTPUT_TIME,
-				"loading: link data: complete (%ds)\n",
+				"loading: working out as/link data: complete (%ds)\n",
 				ce);
 
+	int rc = 0;
+
 	if ( strlen(export_json_dir)
-			&& (r = export_json()) )
-			exit_program(r);
+			&& (r = export_json()) ) {
+			print_str (FLAG_OUTPUT_TIME,
+					ERROR_STR_1,
+					strerror_int(r));
+			rc++;
+	}
 
 	if ( strlen(export_aslist_path)
-			&& (r = export_aslist()) )
-			exit_program(r);
+			&& (r = export_aslist()) ) {
+			print_str (FLAG_OUTPUT_TIME,
+					ERROR_STR_1,
+					strerror_int(r));
+			rc++;
+	}
 
 	if ( strlen(export_links_path)
-			&& (r = export_links()) )
-			exit_program(r);
+			&& (r = export_links()) ) {
+			print_str (FLAG_OUTPUT_TIME,
+					ERROR_STR_1,
+					strerror_int(r));
+			rc++;
+	}
 
-
-	//sleep (10000);
-	return EXIT_SUCCESS;
+	if ( rc )
+		exit_program(2345);
+	else
+		exit_program(0);
 }
-
-#define NODES_HEADER 	"{\"nodes\":["
-#define NODES_FOOTER 	"],\"links\":["
-#define LINKS_FOOTER	"]}"
-#define GROUP_TEMP1		"{\"group\":1,\"name\":\"%u\"},"
-#define GROUP_TEMP2		"{\"group\":1,\"name\":\"%u\"}"
-#define LINK_TEMP1		"{\"source\":%u,\"target\":%u,\"value\":1},"
-#define LINK_TEMP2		"{\"source\":%u,\"target\":%u,\"value\":1}"
 
 int export_aslist
 ( void )
@@ -102,7 +111,7 @@ int export_aslist
 	__syscall_slong_t cs,ce=0;
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: simple as list.. \n");
+			"exporting: AS list to '%s'.. \n", export_aslist_path);
 
 	FILE *fh = fopen(export_aslist_path, "w");
 
@@ -126,8 +135,8 @@ int export_aslist
 	fflush(fh);
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: simple as list: completed (%.4fs) - '%s'\n",
-					(double)ce / 1000000, export_aslist_path);
+			"exporting: AS list: completed (%.4fs)\n",
+					(double)ce / 1000000);
 
 	fclose (fh);
 
@@ -142,7 +151,7 @@ int export_links
 	__syscall_slong_t cs,ce=0;
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: simple links.. \n");
+			"exporting: AS links '%s'.. \n", export_links_path);
 
 	FILE *fh = fopen(export_links_path, "w");
 
@@ -166,8 +175,8 @@ int export_links
 	fflush(fh);
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: simple links: completed (%.4fs) - '%s'\n",
-					(double)ce / 1000000, export_links_path);
+			"exporting: AS links: completed (%.4fs)\n",
+					(double)ce / 1000000);
 
 	fclose (fh);
 
@@ -183,7 +192,9 @@ int export_json
 	int64 r,s,d;
 	__syscall_slong_t cs,ce=0, at, lt;
 
-	print_str(FLAG_OUTPUT_TIME, "exporting: d3 json format.. \n");
+	print_str(FLAG_OUTPUT_TIME,
+			"exporting: D3js .json format to '%s'.. \n"
+			,export_json_dir);
 
 	FILE *fh = fopen(export_json_dir, "w");
 
@@ -192,7 +203,7 @@ int export_json
 
 	cs = mclock_n();
 
-	if ( (qr=write_file(NODES_HEADER,fh,1877,1)) )
+	if ( (qr=write_file(NODES_HEADER,fh,1821,1)) )
 			return qr;
 
 	p_obj_as ptra = (p_obj_as) asdb.first;
@@ -203,18 +214,16 @@ int export_json
 		else
 			sprintf(b, GROUP_TEMP2, ptra->as);
 
-		if ( (qr=write_file(b,fh,1877,1)) )
+		if ( (qr=write_file(b,fh,1821,1)) )
 					return qr;
 
 		ptra = ptra->o.next;
 	}
 
-	if ( (qr=write_file(NODES_FOOTER,fh,1877,1)) )
+	if ( (qr=write_file(NODES_FOOTER,fh,1821,1)) )
 			return qr;
 
 	p_obj_l ptrb = (p_obj_l) linkdb.first;
-
-	char *b2=calloc((1024*1024)*100,1);
 
 	while ( ptrb ) {
 		if ( (r = match_as_numindex(ptrb->s)) > -1 )
@@ -233,13 +242,13 @@ int export_json
 		else
 			sprintf(b, LINK_TEMP2, s, d);
 
-		if ( (qr=write_file(b,fh,1875,1)) )
+		if ( (qr=write_file(b,fh,1821,1)) )
 			return qr;
 
 		ptrb = ptrb->o.next;
 	}
 
-	if ( (qr=write_file(LINKS_FOOTER,fh,1874,1)) )
+	if ( (qr=write_file(LINKS_FOOTER,fh,1821,1)) )
 			return qr;
 
 	fflush(fh);
@@ -247,8 +256,8 @@ int export_json
 	at = mclock_n() - cs;
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: d3 json format: completed (%.4fs) - '%s'\n",
-			(double)at / 1000000, export_json_dir);
+			"exporting: D3js .json format: completed (%.4fs)\n",
+			(double)at / 1000000);
 
 	fclose (fh);
 
