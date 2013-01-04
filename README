@@ -2,9 +2,7 @@ Generates various formats of connectivity data, building from raw ASPATH data
 
 Options:
 
-	source_dir - Tries to read from any files with a .txt extension, 
-				 located in this folder. Files should contain raw AS path
-				 data only!
+	source_dir - Tries to read from any files with a .txt extension, located in this folder. Files should contain raw AS path data only!
 				 
 	Export options (Optional)
 					 
