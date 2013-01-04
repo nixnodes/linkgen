@@ -3,11 +3,11 @@ Generates various formats of connectivity data, building from raw ASPATH data
 Options:
 
  source_dir - Tries to read from any files with a .txt 
-  extension, located in this folder. Files should 
-  contain raw AS path data only!
+              extension, located in this folder. Files 
+              should contain raw AS path data only!
 
 Export options (Optional)
 
- export_json - Defines the json format output file
+ export_json -    Defines the json format output file
  export_aslinks - Defines the simple A-B format output file
- export_aslist - Defines where to write the full as list
+ export_aslist -  Defines where to write the full as list
