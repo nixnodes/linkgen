@@ -66,5 +66,7 @@ int export_links
 int export_aslist
 ( void );
 
+goa linkdb,
+	asdb;
 
 #endif /* LPARSE_H_ */

@@ -68,7 +68,7 @@ int main(void) {
 	ce = mclock_s() - cs;
 
 	print_str(FLAG_OUTPUT_TIME,
-				"loading: working out as/link data: complete (%ds)\n",
+				"loading: working out AS/link data: complete (%ds)\n",
 				ce);
 
 	int rc = 0;
@@ -341,22 +341,22 @@ int parse_path_chain
 (	char *line)
 {
 	char *loo[1024*8] = {0};
-	obj_l l;
+	obj_l l = {0};
 
 	int r = split_string(line,0x20,loo,499);
 	int i;
 	for ( i = 0; i < r - 1; i++ ) {
-		memset (&l,0x0,sizeof(obj_l));
-		l.s = (uint)atoi((char*)&loo[i]);
-		l.d = (uint)atoi((char*)&loo[i+1]);
+		l.s = (uint)atoi((const char*)&loo[i]);
+		l.d = (uint)atoi((const char*)&loo[i+1]);
 
-		if ( l.s != 23456 && l.d != 23456 )
-			if ( !match_link (l.s, l.d)
-					&& l.s != l.d ) {
-				register_object(&l, &linkdb, &LINKDB_SIZE, sizeof (obj_l));
-				if ( errno )
-					return errno;
-			}
+		if ( (l.s != 23456 && l.d != 23456
+				&& l.s != l.d)
+				&& !match_link (l.s, l.d) ) {
+			register_object(&l, &linkdb, &LINKDB_SIZE, sizeof (obj_l));
+			memset (&l,0x0,sizeof(obj_l));
+			if ( errno )
+				return errno;
+		}
 	}
 
 	return 0;

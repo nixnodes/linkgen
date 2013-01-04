@@ -76,8 +76,8 @@ int open_pipe_to_executable
 }
 
 int read_from_pipe
-(char *buffer,
-		FILE *pipe)
+(  	char *buffer,
+		FILE *pipe )
 {
 	size_t read = 0;
 
@@ -93,7 +93,7 @@ int read_from_pipe
 }
 
 int file_exists
-(char *file)
+( 	char *file )
 {
 	int r;
 

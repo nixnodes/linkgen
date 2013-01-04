@@ -25,7 +25,8 @@ lparse-init.o: init.c common.h settings.h /usr/include/stdio.h \
  /usr/include/bits/sched.h /usr/include/xlocale.h \
  /usr/include/bits/setjmp.h /usr/include/unistd.h \
  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
- /usr/include/bits/confname.h /usr/include/getopt.h thread.h
+ /usr/include/bits/confname.h /usr/include/getopt.h thread.h register.h \
+ lparse.h
 
 common.h:
 
@@ -144,3 +145,7 @@ generic.h:
 /usr/include/getopt.h:
 
 thread.h:
+
+register.h:
+
+lparse.h:
