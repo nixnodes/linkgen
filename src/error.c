@@ -28,6 +28,7 @@ void *ec_ref[1024] = {
 		(void*) 1043, "DAEMON valid optons are 0 (normal) and 1 (background)",
 		(void*) 1050, "register full",
 		(void*) 1351, "unable to register class",
+		(void*) 1078, "terminating on user request",
 		(void*) 1113, "cannot initialize mutexes",
 		(void*) 1340, "unable to register new connection",
 		(void*) 1342, "connection accepted",
