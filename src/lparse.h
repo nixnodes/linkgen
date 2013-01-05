@@ -27,7 +27,7 @@ int 	ASDB_SIZE;
 typedef struct link_object
 {
 	o_gh o;
-	uint s, d;
+	int64 s, d;
 } obj_l, *p_obj_l;
 
 typedef struct as_object
