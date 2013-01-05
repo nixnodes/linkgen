@@ -39,12 +39,12 @@ void catch_sig
 			(FLAG_OUTPUT_TIME|FLAG_OUTPUT_LOG,
 				"caught SIGINT: quitting..\n");
 
-		exit_program (0);
+		exit_program (1078);
 	}
 	if ( sig == SIGTERM || sig == SIGQUIT ) {
 		print_str
 			(FLAG_OUTPUT_TIME|FLAG_OUTPUT_LOG,
-				"caught SIGTERM|SIGQUIT: exiting here\n");
+				"\ncaught SIGTERM|SIGQUIT: exiting here\n");
 
 		exit (sig);
 	}
