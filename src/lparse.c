@@ -111,14 +111,15 @@ int export_aslist
 	time_t cs,ce=0;
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: AS list to '%s'.. \n", export_aslist_path);
+			"exporting: AS list to '%s'.. \n",
+			export_aslist_path);
 
 	FILE *fh = fopen(export_aslist_path, "w");
 
 	if ( !fh )
 		return 1726;
 
-	cs = mclock_n();
+	cs = mclock_s();
 
 	p_obj_as ptr = (p_obj_as) asdb.first;
 
@@ -130,13 +131,13 @@ int export_aslist
 		ptr = ptr->o.next;
 	}
 
-	ce = mclock_n() - cs;
+	ce = mclock_s() - cs;
 
 	fflush(fh);
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: AS list: completed (%.4fs)\n",
-					(double)ce / 1000000);
+			"exporting: AS list: completed (%us)\n",
+					ce);
 
 	fclose (fh);
 
@@ -158,7 +159,7 @@ int export_links
 	if ( !fh )
 		return 1736;
 
-	cs = mclock_n();
+	cs = mclock_s();
 
 	p_obj_l ptr = (p_obj_l) linkdb.first;
 
@@ -170,13 +171,13 @@ int export_links
 		ptr = ptr->o.next;
 	}
 
-	ce = mclock_n() - cs;
+	ce = mclock_s() - cs;
 
 	fflush(fh);
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: AS links: completed (%.4fs)\n",
-					(double)ce / 1000000);
+			"exporting: AS links: completed (%us)\n",
+					ce);
 
 	fclose (fh);
 
@@ -201,7 +202,7 @@ int export_json
 	if ( !fh )
 		return 1876;
 
-	cs = mclock_n();
+	cs = mclock_s();
 
 	if ( (qr=write_file(NODES_HEADER,fh,1821,1)) )
 			return qr;
@@ -253,11 +254,11 @@ int export_json
 
 	fflush(fh);
 
-	at = mclock_n() - cs;
+	at = mclock_s() - cs;
 
 	print_str(FLAG_OUTPUT_TIME,
-			"exporting: D3js .json format: completed (%.4fs)\n",
-			(double)at / 1000000);
+			"exporting: D3js .json format: completed (%us)\n",
+			at);
 
 	fclose (fh);
 
@@ -328,7 +329,7 @@ int load_into_memory
 		return 1691;
 	}
 
-	while ( fgets(alb, 16384, fh)  ) {
+	while ( fgets(alb, 8192, fh)  ) {
 		if ( (r = parse_path_chain (alb)) )
 			break;
 	}
@@ -343,15 +344,18 @@ int parse_path_chain
 	char *loo[1024*8] = {0};
 	obj_l l = {0};
 
-	int i, r = split_string(line,0x20,loo,499);
+	int i, r = split_string(line,0x20,loo,512);
 
-	for ( i = 0; i < r; i++ ) {
+	for ( i = 0; i < r - 1; i++ ) {
 		memset (&l,0x0,sizeof(obj_l));
-		l.s = (uint)atoi((const char*)&loo[i]);
-		l.d = (uint)atoi((const char*)&loo[i+1]);
 
-		if ( (l.s > 0 && l.d > 0) &&
-				(l.s != 23456 && l.d != 23456
+		l.s = (uint)atoll((const char*)&loo[i]);
+		if ( l.s < 1 ) continue;
+
+		l.d = (uint)atoll((const char*)&loo[i+1]);
+		if (  l.d < 1)	continue;
+
+		if ( (l.s != 23456 && l.d != 23456
 				&& l.s != l.d)
 				&& !match_link (l.s, l.d) ) {
 			register_object(&l, &linkdb, &LINKDB_SIZE, sizeof (obj_l));
@@ -360,7 +364,6 @@ int parse_path_chain
 				return errno;
 		}
 	}
-
 	return 0;
 }
 
