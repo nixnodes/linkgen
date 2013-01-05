@@ -210,7 +210,7 @@ int init_register
 int free_register
 (	p_goa reg )
 {
-	if ( reg && reg->m_data ) {
+	if ( reg->m_data ) {
 		free(reg->m_data);
 		return 0;
 	}
