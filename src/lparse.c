@@ -343,17 +343,19 @@ int parse_path_chain
 	char *loo[1024*8] = {0};
 	obj_l l = {0};
 
-	int r = split_string(line,0x20,loo,499);
-	int i;
-	for ( i = 0; i < r - 1; i++ ) {
+	int i, r = split_string(line,0x20,loo,499);
+
+	for ( i = 0; i < r; i++ ) {
+		memset (&l,0x0,sizeof(obj_l));
 		l.s = (uint)atoi((const char*)&loo[i]);
 		l.d = (uint)atoi((const char*)&loo[i+1]);
 
-		if ( (l.s != 23456 && l.d != 23456
+		if ( (l.s > 0 && l.d > 0) &&
+				(l.s != 23456 && l.d != 23456
 				&& l.s != l.d)
 				&& !match_link (l.s, l.d) ) {
 			register_object(&l, &linkdb, &LINKDB_SIZE, sizeof (obj_l));
-			memset (&l,0x0,sizeof(obj_l));
+
 			if ( errno )
 				return errno;
 		}
