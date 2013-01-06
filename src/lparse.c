@@ -355,6 +355,9 @@ int parse_path_chain
 		l.d = (uint)atoll((const char*)&loo[i+1]);
 		if (  l.d < 1)	continue;
 
+		if ( l.d > INT32_MAX ||
+				l.s > INT32_MAX ) continue;
+
 		if ( (l.s != 23456 && l.d != 23456
 				&& l.s != l.d)
 				&& !match_link (l.s, l.d) ) {
