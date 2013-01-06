@@ -1,5 +1,7 @@
 Generates various formats of connectivity data, building from raw ASPATH data
 
+Configuration should be found in /etc/lparse.conf
+
 Options:
 
  source_dir - Tries to read from any files with a .txt 
