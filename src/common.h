@@ -26,6 +26,9 @@
 #define uint16		unsigned short
 #define byte		unsigned char
 
+#define INT32_MAX   0xFFFFFFFF
+#define INT64_MAX   0xFFFFFFFFFFFFFFFF
+
 void catch_sig (int sig);
 
 int mem_init (void);
@@ -38,7 +41,6 @@ void exit_program(int code);
 
 struct tm *get_time (void);
 
-time_t mclock_s (void);
 time_t mclock_n (void);
 
 void catch_sig (int sig);
