@@ -8,25 +8,27 @@
 
 #include <common.h>
 
+
+
 time_t mclock_s
 (void)
 {
 	struct timespec ts = { 0 };
-
-	if( !clock_gettime(CLOCK_REALTIME,&ts) ) {
+	if( !clock_gettime(CLOCK_MONOTONIC,&ts) ) {
 		return ts.tv_sec;
 	}
 
 	return 0;
 }
 
+
+
 time_t mclock_n
 (void)
 {
-	struct timespec ts = { 0 };
-
-	if( !clock_gettime(CLOCK_REALTIME,&ts) ) {
-		return ts.tv_nsec;
+	struct timespec ts_n = { 0 };
+	if( !clock_gettime(CLOCK_MONOTONIC,&ts_n) ) {
+		return ts_n.tv_nsec;
 	}
 
 	return 0;
