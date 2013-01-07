@@ -1,5 +1,6 @@
 Generates various formats of connectivity data, building from raw ASPATH data
 
+
 Configuration should be found in /etc/lparse.conf
 
 Options:
@@ -10,6 +11,6 @@ Options:
 
 Export options (Optional)
 
- export_json -    Defines the json format output file
- export_aslinks - Defines the simple A-B format output file
+ export_json -    Defines D3js (json) format output file
+ export_aslinks - Defines simple A-B format output file
  export_aslist -  Defines where to write the full as list
