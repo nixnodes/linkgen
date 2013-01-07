@@ -11,5 +11,7 @@
 	
 * 0.1-7 (6.1.2013)
 	- Fixed duration stats timers (shows seconds now)
-	- Fixed bug: generation of link data with null AS values  
+	- Fixed bug: generation of link data with null AS values
 	
+* 0.1-8 (7.1.2013)
+	- Fixed parser to validate AS numbers properly
