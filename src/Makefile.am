@@ -5,6 +5,3 @@ lparse_LDFLAGS=-lpthread -lrt
 
 lparsedir=/etc
 lparse_DATA=lparse.conf
-
-lparse_CFLAGS=-O3
-
