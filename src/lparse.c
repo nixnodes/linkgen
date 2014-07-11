@@ -158,7 +158,7 @@ export_links(void)
 
   while (ptr)
     {
-      sprintf(b, "%u-%u\n", ptr->s, ptr->d);
+      sprintf(b, "%lld-%lld\n", ptr->s, ptr->d);
       if ((r = write_file(b, fh, 1731, 1)))
         return r;
 
@@ -343,26 +343,35 @@ load_into_memory(char *data, unsigned char type, void *arg)
 int
 parse_path_chain(char *line)
 {
-  char *loo[1024 * 8] =
+  mda sp_s =
     { 0 };
   obj_l l =
     { 0 };
 
-  int i, r = split_string(line, 0x20, loo, 512);
+  md_init(&sp_s, 32);
 
-  for (i = 0; i < r - 1; i++)
+  int i, r = split_string(line, 0x20, &sp_s);
+
+  p_md_obj ptr = md_first(&sp_s);
+
+  while (ptr)
     {
+      if (NULL == ptr->next)
+        {
+          break;
+        }
       memset(&l, 0x0, sizeof(obj_l));
 
-      l.s = (int64_t) strtoll((const char*) &loo[i], NULL, 10);
+      l.s = (int64_t) strtoll((const char*) ptr->ptr, NULL, 10);
       if (l.s < 1)
         continue;
 
-      l.d = (int64_t) strtoll((const char*) &loo[i + 1], NULL, 10);
+      l.d = (int64_t) strtoll((const char*) ((p_md_obj) ptr->next)->ptr, NULL,
+          10);
       if (l.d < 1)
         continue;
 
-      if (l.d > INT32_MAX || l.s > INT32_MAX)
+      if (l.d > UINT32_MAX || l.s > UINT32_MAX)
         continue;
 
       if ((l.s != 23456 && l.d != 23456 && l.s != l.d) && !match_link(l.s, l.d))
@@ -372,7 +381,10 @@ parse_path_chain(char *line)
           if ( errno)
             return errno;
         }
+
+      ptr = ptr->next;
     }
+
   return 0;
 }
 

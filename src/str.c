@@ -120,41 +120,6 @@ int print_str
 	return 0;
 }
 
-int split_string
-(	char *line,
-		char dl,
-		char *output_t[],
-		int max_o)
-{
-	int i, p, c, llen
-			= strlen (line);
-
-	if ( llen > max_o )
-		return 1489;
-
-	for ( i = 0, p = 0, c = 0;
-			i <= llen;
-			i++ ) {
-
-		while ( line[i] == dl
-				&& line[i] )
-						i++;
-		p = i;
-
-		while ( line[i] != dl
-				&& line[i] != 0xA
-				&& line[i] )
-						i++;
-
-		if ( i > p) {
-			memcpy (&output_t[c],
-					&line[p],
-					i - p);
-			c++;
-		}
-	}
-	return c;
-}
 
 int val_as_bin_str (char *out, uint64 val)
 {
@@ -174,4 +139,29 @@ int val_as_bin_str (char *out, uint64 val)
 	return y + 1;
 }
 
+int
+split_string(char *line, char dl, pmda output_t)
+{
+  int i, p, c, llen = strlen(line);
 
+  for (i = 0, p = 0, c = 0; i <= llen; i++)
+    {
+
+      while (line[i] == dl && line[i])
+        i++;
+      p = i;
+
+      while (line[i] != dl && line[i] != 0xA && line[i])
+        i++;
+
+      if (i > p)
+        {
+          char *buffer = md_alloc(output_t, (i - p) + 10);
+          if (!buffer)
+            return -1;
+          memcpy(buffer, &line[p], i - p);
+          c++;
+        }
+    }
+  return c;
+}

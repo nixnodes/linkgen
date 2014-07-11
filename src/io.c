@@ -6,179 +6,172 @@
 #include <common.h>
 #include <io.h>
 
-int write_file
-( 	char *data,
-		FILE *fh,
-		int rof,
-		int f)
+int
+write_file(char *data, FILE *fh, int rof, int f)
 {
-	int r;
+  int r;
 
-	r = fwrite(data, 1, strlen(data), fh);
+  r = fwrite(data, 1, strlen(data), fh);
 
-	if ( !r ) {
-		if ( f & 1 ) {
-			fclose(fh);
-		}
-		return rof;
-	}
+  if (!r)
+    {
+      if (f & 0x1)
+        {
+          fclose(fh);
+        }
+      return rof;
+    }
 
-	return 0;
+  return 0;
 }
 
-long get_file_size
-(FILE *fp)
+long
+get_file_size(FILE *fp)
 {
-	long offset, s_offset;	
+  long offset, s_offset;
 
-	s_offset = ftell(fp);
-	fseek(fp, 0L, SEEK_END);
-	offset = ftell(fp);
-	fseek(fp, s_offset, SEEK_SET);
+  s_offset = ftell(fp);
+  fseek(fp, 0L, SEEK_END);
+  offset = ftell(fp);
+  fseek(fp, s_offset, SEEK_SET);
 
-	return offset;
+  return offset;
 }
 
-long read_file
-(char *file,
-unsigned char *buffer,
-	size_t read_max)
+long
+read_file(char *file, unsigned char *buffer, size_t read_max)
 {
-	size_t read;
-	FILE *fp;
+  size_t read;
+  FILE *fp;
 
-	if ( (fp = fopen
-			(file, "r")) == NULL )
-		return -0xF;
+  if ((fp = fopen(file, "r")) == NULL)
+    return -0xF;
 
-	for ( read = 0; !feof(fp) &&
-			read < read_max; read +=
-			fread(&buffer[read], 1,
-			read_max - read - 1, fp) ) {
-	}
+  for (read = 0; !feof(fp) && read < read_max;
+      read += fread(&buffer[read], 1, read_max - read - 1, fp))
+    {
+    }
 
-	fclose (fp);
-	
-	return read;
+  fclose(fp);
+
+  return read;
 }
 
-
-int open_pipe_to_executable
-(char *command,
-		po_thrd o_thread)
+int
+open_pipe_to_executable(char *command, po_thrd o_thread)
 {
-	o_thread->fd_pipe = popen (command, "r");
-	
-	if ( o_thread->fd_pipe == NULL ) 
-		return errno;
-	
-	return 0;	 
+  o_thread->fd_pipe = popen(command, "r");
+
+  if (o_thread->fd_pipe == NULL)
+    return errno;
+
+  return 0;
 }
 
-int read_from_pipe
-(  	char *buffer,
-		FILE *pipe )
+int
+read_from_pipe(char *buffer, FILE *pipe)
 {
-	size_t read = 0;
+  size_t read = 0;
 
-	while ( !feof(pipe) ) { 
-		if ( (read +=
-			fread (&buffer[read], 1,
-				READ_MAX - read, pipe)) <= 0 ) {
-			break;	
-		}
-	}
+  while (!feof(pipe))
+    {
+      if ((read += fread(&buffer[read], 1,
+      READ_MAX - read, pipe)) <= 0)
+        {
+          break;
+        }
+    }
 
-	return read;
+  return read;
 }
 
-int file_exists
-( 	char *file )
+int
+file_exists(char *file)
 {
-	int r;
+  int r;
 
-	errno = 0;
-	FILE *fd = fopen
-			(file, "r");
+  errno = 0;
+  FILE *fd = fopen(file, "r");
 
-	r = errno;
+  r = errno;
 
-	if ( fd ) {
-		fclose (fd);
-	}
+  if (fd)
+    {
+      fclose(fd);
+    }
 
-	return r;
+  return r;
 }
 
-int dir_exists
-(char *dir)
+int
+dir_exists(char *dir)
 {
-	int r;
+  int r;
 
-	errno = 0;
-	DIR *dd = opendir
-			(dir);
+  errno = 0;
+  DIR *dd = opendir(dir);
 
-	r = errno;
+  r = errno;
 
-	if ( dd ) {
-		closedir (dd);
-	}
+  if (dd)
+    {
+      closedir(dd);
+    }
 
-	return r;
+  return r;
 }
 
-int exec_and_wait_for_output
-(po_thrd ptr,
-		char *command)
+int
+exec_and_wait_for_output(po_thrd ptr, char *command)
 {
-	char buf[0x2000];
-	int r=4;
+  char buf[0x2000];
+  int r = 4;
 
-	bzero (buf, 0x2000);
+  bzero(buf, 0x2000);
 
-	if ( (r = open_pipe_to_executable
-				(command, ptr)) ) {
-		return -0xE;
-	}
+  if ((r = open_pipe_to_executable(command, ptr)))
+    {
+      return -0xE;
+    }
 
-	r = read_from_pipe
-			(buf, ptr->fd_pipe);
+  r = read_from_pipe(buf, ptr->fd_pipe);
 
-	pclose (ptr->fd_pipe);
+  pclose(ptr->fd_pipe);
 
-	return 0;
+  return 0;
 }
 
-int enum_dir
-(	char *dir,
-	void *cb,
-	void *arg,
-	int f)
+int
+enum_dir(char *dir, void *cb, void *arg, int f)
 {
-	int (*callback_f)(char *data, unsigned char type, void *arg) = NULL;
-	struct dirent *dirp;
-	int r = 0, ir;
+  int
+  (*callback_f)(char *data, unsigned char type, void *arg) = NULL;
+  struct dirent *dirp;
+  int r = 0, ir;
 
-	callback_f = cb;
+  callback_f = cb;
 
-	if ( !callback_f ) {
-		return 1060;
-	}
+  if (!callback_f)
+    {
+      return 1060;
+    }
 
-	DIR *dp = opendir (dir);
+  DIR *dp = opendir(dir);
 
-	if ( !dp ) {
-		return 1061;
-	}
+  if (!dp)
+    {
+      return 1061;
+    }
 
-	while ( (dirp = readdir (dp)) ) {
-		if ( (ir = callback_f (dirp->d_name, dirp->d_type, arg)) ) {
-			if ( f == 1 )
-				return ir;
-			else
-				r++;
-		}
-	}
-	return r;
+  while ((dirp = readdir(dp)))
+    {
+      if ((ir = callback_f(dirp->d_name, dirp->d_type, arg)))
+        {
+          if (f == 1)
+            return ir;
+          else
+            r++;
+        }
+    }
+  return r;
 }

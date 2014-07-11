@@ -22,10 +22,13 @@ int trim_string (char *input, char *output, char match, int len);
 
 int print_str (unsigned short flags, char *buf, ...);
 
-int split_string (char *line, char dl, char *output_t[], int max_o);
-
 int val_as_bin_str (char *out, uint64 val);
 
 pthread_mutex_t  tse;
+
+#include <memory_int.h>
+
+int
+split_string(char *line, char dl, pmda output_t);
 
 #endif /* STR_H_ */

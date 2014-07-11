@@ -26,8 +26,41 @@
 #define uint16		unsigned short
 #define byte		unsigned char
 
-#define INT32_MAX   0xFFFFFFFF
-#define INT64_MAX   0xFFFFFFFFFFFFFFFF
+
+#define a64                             ((ulint64_t) 1)
+#define a32                             ((uint32_t) 1)
+
+#include <inttypes.h>
+
+#ifndef _STDINT_H
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+#ifndef __uint32_t_defined
+typedef unsigned int uint32_t;
+# define __uint32_t_defined
+#endif
+#if __WORDSIZE == 64
+typedef unsigned long int uint64_t;
+#else
+__extension__
+typedef unsigned long long int uint64_t;
+#endif
+#endif
+
+#if __x86_64__ || __ppc64__
+#define uintaa_t uint64_t
+#define ENV_64
+#define __STR_ARCH      "x86_64"
+#define __AA_SPFH       "%.16X"
+#else
+#define uintaa_t uint32_t
+#define ENV_32
+#define __STR_ARCH      "i686"
+#define __AA_SPFH       "%.8X"
+#endif
+
+
+
 
 void catch_sig (int sig);
 

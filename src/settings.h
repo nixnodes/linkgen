@@ -10,6 +10,6 @@
 
 #define	VER_MAJOR		0
 #define VER_MINOR		1
-#define VER_REVISION	        9
+#define VER_REVISION	        10
 
 #endif /* SETTINGS_H_ */
