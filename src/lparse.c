@@ -385,6 +385,8 @@ parse_path_chain(char *line)
       ptr = ptr->next;
     }
 
+  md_g_free(&sp_s);
+
   return 0;
 }
 
