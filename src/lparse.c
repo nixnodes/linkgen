@@ -340,6 +340,8 @@ load_into_memory(char *data, unsigned char type, void *arg)
   return r;
 }
 
+#define MSG_PATHCHAIN_INVALID_LINK "ERROR: out-of-range link found in chain: %lld\n"
+
 int
 parse_path_chain(char *line)
 {
@@ -364,15 +366,30 @@ parse_path_chain(char *line)
 
       l.s = (int64_t) strtoll((const char*) ptr->ptr, NULL, 10);
       if (l.s < 1)
-        continue;
+        {
+          print_str(FLAG_OUTPUT_TIME, MSG_PATHCHAIN_INVALID_LINK, l.s);
+          continue;
+        }
 
       l.d = (int64_t) strtoll((const char*) ((p_md_obj) ptr->next)->ptr, NULL,
           10);
       if (l.d < 1)
-        continue;
+        {
+          print_str(FLAG_OUTPUT_TIME, MSG_PATHCHAIN_INVALID_LINK, l.d);
+          continue;
+        }
 
-      if (l.d > UINT32_MAX || l.s > UINT32_MAX)
-        continue;
+      if (l.s > UINT32_MAX)
+        {
+          print_str(FLAG_OUTPUT_TIME, MSG_PATHCHAIN_INVALID_LINK, l.s);
+          continue;
+        }
+
+      if (l.d > UINT32_MAX)
+        {
+          print_str(FLAG_OUTPUT_TIME, MSG_PATHCHAIN_INVALID_LINK, l.d);
+          continue;
+        }
 
       if ((l.s != 23456 && l.d != 23456 && l.s != l.d) && !match_link(l.s, l.d))
         {
